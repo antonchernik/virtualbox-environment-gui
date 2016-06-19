@@ -1190,7 +1190,7 @@ class PMA_Config
             if (!($perms === false) && ($perms & 2)) {
                 // This check is normally done after loading configuration
                 $this->checkWebServerOs();
-                if ($this->get('PMA_IS_WINDOWS') == 0) {
+                /*if ($this->get('PMA_IS_WINDOWS') == 0) {
                     $this->source_mtime = 0;
                     PMA_fatalError(
                         __(
@@ -1198,7 +1198,7 @@ class PMA_Config
                             . 'should not be world writable!'
                         )
                     );
-                }
+                }*/
             }
         }
     }
