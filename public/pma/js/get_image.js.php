@@ -17,13 +17,6 @@ header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 3600) . ' GMT');
 define('PMA_MINIMUM_COMMON', true);
 require_once './libraries/common.inc.php';
 
-require_once './libraries/OutputBuffering.class.php';
-$buffer = PMA_OutputBuffering::getInstance();
-$buffer->start();
-register_shutdown_function(function() {
-    echo PMA_OutputBuffering::getInstance()->getContents();
-});
-
 // Get the data for the sprites, if it's available
 if (is_readable($_SESSION['PMA_Theme']->getPath() . '/sprites.lib.php')) {
     include $_SESSION['PMA_Theme']->getPath() . '/sprites.lib.php';
@@ -108,15 +101,15 @@ function PMA_getImage(image, alternate, attributes) {
     }
     // set alt
     if (attributes.alt != undefined) {
-        retval.attr('alt', attributes.alt);
+        retval.attr('alt', escapeHtml(attributes.alt));
     } else {
-        retval.attr('alt', alternate);
+        retval.attr('alt', escapeHtml(alternate));
     }
     // set title
     if (attributes.title != undefined) {
-        retval.attr('title', attributes.title);
+        retval.attr('title', escapeHtml(attributes.title));
     } else {
-        retval.attr('title', alternate);
+        retval.attr('title', escapeHtml(alternate));
     }
     // set src
     var klass = image.replace('.gif', '').replace('.png', '');
@@ -126,10 +119,7 @@ function PMA_getImage(image, alternate, attributes) {
     } else {
         // it's an image file
         retval.isSprite = false;
-        retval.attr(
-            'src',
-            "<?php echo $_SESSION['PMA_Theme']->getImgPath(); ?>" + image
-        );
+        retval.attr('src', "<?php echo $_SESSION['PMA_Theme']->getImgPath(); ?>" + image);
     }
     // set all other attrubutes
     for (var i in attributes) {

@@ -25,7 +25,7 @@ function PMA_printGitRevision()
     // load revision data from repo
     $GLOBALS['PMA_Config']->checkGitRevision();
 
-    // if using a remote commit fast-forwarded, link to GitHub
+    // if using a remote commit fast-forwarded, link to Github
     $commit_hash = substr(
         $GLOBALS['PMA_Config']->get('PMA_VERSION_GIT_COMMITHASH'),
         0,
@@ -40,7 +40,7 @@ function PMA_printGitRevision()
                 'https://github.com/phpmyadmin/phpmyadmin/commit/'
                 . $GLOBALS['PMA_Config']->get('PMA_VERSION_GIT_COMMITHASH')
             )
-            . '" target="_blank">' . $commit_hash . '</a>';
+            . '" rel="noopener noreferrer" target="_blank">' . $commit_hash . '</a>';
     }
 
     $branch = $GLOBALS['PMA_Config']->get('PMA_VERSION_GIT_BRANCH');
@@ -50,7 +50,7 @@ function PMA_printGitRevision()
                 'https://github.com/phpmyadmin/phpmyadmin/tree/'
                 . $GLOBALS['PMA_Config']->get('PMA_VERSION_GIT_BRANCH')
             )
-            . '" target="_blank">' . $branch . '</a>';
+            . '" rel="noopener noreferrer" target="_blank">' . $branch . '</a>';
     }
     if ($branch !== false) {
         $branch = sprintf(__('%1$s from %2$s branch'), $commit_hash, $branch);
@@ -61,7 +61,7 @@ function PMA_printGitRevision()
     $committer = $GLOBALS['PMA_Config']->get('PMA_VERSION_GIT_COMMITTER');
     $author = $GLOBALS['PMA_Config']->get('PMA_VERSION_GIT_AUTHOR');
     PMA_printListItem(
-        __('Git revision:') . ' '
+        __('Git revision') . ': '
         . $branch . ',<br /> '
         . sprintf(
             __('committed on %1$s by %2$s'),

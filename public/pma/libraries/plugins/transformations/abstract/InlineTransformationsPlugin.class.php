@@ -12,7 +12,7 @@ if (! defined('PHPMYADMIN')) {
 
 /* Get the transformations interface */
 require_once 'libraries/plugins/TransformationsPlugin.class.php';
-/* For PMA_Transformation_globalHtmlReplace */
+/* For PMA_transformation_global_html_replace */
 require_once 'libraries/transformations.lib.php';
 
 /**
@@ -42,31 +42,38 @@ abstract class InlineTransformationsPlugin extends TransformationsPlugin
      * @param array  $options transformation options
      * @param string $meta    meta information
      *
-     * @return string
+     * @return void
      */
     public function applyTransformation($buffer, $options = array(), $meta = '')
     {
         if (PMA_IS_GD2) {
-            $transform_options = array (
-                'string' => '<a href="transformation_wrapper.php'
-                    . $options['wrapper_link']
-                    . '" target="_blank"><img src="transformation_wrapper.php'
-                    . $options['wrapper_link'] . '&amp;resize=jpeg&amp;newWidth='
-                    . (isset($options[0]) ? $options[0] : '100') . '&amp;newHeight='
-                    . (isset($options[1]) ? $options[1] : 100)
-                    . '" alt="[__BUFFER__]" border="0" /></a>'
-            );
-        } else {
-            $transform_options = array (
-                'string' => '<img src="transformation_wrapper.php'
+            return '<a href="transformation_wrapper.php'
                 . $options['wrapper_link']
-                . '" alt="[__BUFFER__]" width="320" height="240" />'
-            );
+                . '" rel="noopener noreferrer" target="_blank"><img src="transformation_wrapper.php'
+                . $options['wrapper_link'] . '&amp;resize=jpeg&amp;newWidth='
+                . (isset($options[0]) ? intval($options[0]) : '100') . '&amp;newHeight='
+                . (isset($options[1]) ? intval($options[1]) : 100)
+                . '" alt="' . htmlspecialchars($buffer) . '" border="0" /></a>';
+        } else {
+            return '<img src="transformation_wrapper.php'
+                . $options['wrapper_link']
+                . '" alt="' . htmlspecialchars($buffer) . '" width="320" height="240" />';
         }
-        return PMA_Transformation_globalHtmlReplace(
-            $buffer,
-            $transform_options
-        );
+    }
+
+    /**
+     * This method is called when any PluginManager to which the observer
+     * is attached calls PluginManager::notify()
+     *
+     * @param SplSubject $subject The PluginManager notifying the observer
+     *                            of an update.
+     *
+     * @todo implement
+     * @return void
+     */
+    public function update (SplSubject $subject)
+    {
+        ;
     }
 
 
